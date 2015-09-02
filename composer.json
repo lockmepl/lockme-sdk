@@ -1,0 +1,21 @@
+{
+    "name": "lustmored/lockme-sdk",
+    "description": "LockMe SDK",
+    "type": "library",
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "license": "GPLv2",
+    "authors": [
+        {
+            "name": "Jakub Caban",
+            "email": "kuba@whyblack.pl"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "LockMe\\": "src/"
+        }
+    }
+}

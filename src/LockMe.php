@@ -38,18 +38,18 @@ class LockMe{
   
   public function AddReservation($data){
     if(!$data['roomid']){
-      throw new Exception("No room ID");
+      throw new \Exception("No room ID");
     }
     if(!$data["date"]){
-      throw new Exception("No date");
+      throw new \Exception("No date");
     }
     if(!$data["hour"]){
-      throw new Exception("No hour");
+      throw new \Exception("No hour");
     }
     return $this->_request("reservation", 'PUT', $data);
   }
   
-  public function DeleteReservation($id, $data = []){
+  public function DeleteReservation($id, $data = array()){
     return $this->_request("reservation/{$id}", 'DELETE', $data);
   }
   

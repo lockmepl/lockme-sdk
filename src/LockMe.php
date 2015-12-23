@@ -15,10 +15,9 @@ class LockMe{
   }
   
   public function Decrypt(){
-    $headers = apache_request_headers();
     $body = file_get_contents("php://input");
     $hash = sha1($body.$this->secret);
-    if($hash !== $headers["Signature"]){
+    if($hash !== $_SERVER['HTTP_SIGNATURE']){
       throw new LockMe_Exception("Wrong signature");
     }
     return json_decode($body, true);
@@ -67,6 +66,8 @@ class LockMe{
     
     $ch = curl_init(self::API_URL."/v".self::API_VERSION."/".$url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
       "Content-Type: application/json",
       "Partner-Key: {$this->key}",

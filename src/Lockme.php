@@ -87,6 +87,9 @@ class Lockme{
     }else{
       throw new \Exception("Incorrect access token");
     }
+    if($this->accessToken->hasExpired()){
+      $this->refreshToken();
+    }
     return $this->accessToken;
   }
 

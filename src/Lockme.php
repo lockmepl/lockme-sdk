@@ -1,19 +1,18 @@
 <?php
+namespace Lockme;
 
-namespace LockMe;
-
-class LockMe{
+class Lockme{
   const API_URL="https://lockme.pl/api/";
   const API_VERSION = "1.0";
-  
+
   private $key;
   private $secret;
-  
+
   function __construct($key, $secret){
     $this->key = $key;
     $this->secret = $secret;
   }
-  
+
   public function Decrypt(){
     $body = file_get_contents("php://input");
     $hash = sha1($body.$this->secret);
@@ -22,19 +21,19 @@ class LockMe{
     }
     return json_decode($body, true);
   }
-  
+
   public function Test(){
     return $this->_request("test");
   }
-  
+
   public function RoomList(){
     return $this->_request("rooms");
   }
-  
+
   public function Reservation($id){
     return $this->_request("reservation/{$id}");
   }
-  
+
   public function AddReservation($data){
     if(!$data['roomid']){
       throw new \Exception("No room ID");
@@ -47,23 +46,23 @@ class LockMe{
     }
     return $this->_request("reservation", 'PUT', $data);
   }
-  
+
   public function DeleteReservation($id, $data = array()){
     return $this->_request("reservation/{$id}", 'DELETE', $data);
   }
-  
+
   public function EditReservation($id, $data){
     return $this->_request("reservation/{$id}", 'POST', $data);
   }
-  
+
   public function PricerList(){
     return $this->_request("pricers");
   }
-  
+
   private function _request($url, $method='GET', $params=array()){
     $params = json_encode($params);
     $hash = sha1($method.$url.$params.$this->secret);
-    
+
     $ch = curl_init(self::API_URL."/v".self::API_VERSION."/".$url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);

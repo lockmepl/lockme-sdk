@@ -3,19 +3,19 @@
     "description": "LockMe SDK",
     "type": "library",
     "require": {
-        "php": ">=5.3.0"
+        "php": ">=5.5.0",
+        "lustmored/oauth2-lockme": "^1.0.0"
     },
-    "license": "GPLv2",
+    "license": "GPLv3",
     "authors": [
         {
             "name": "Jakub Caban",
             "email": "kuba@whyblack.pl"
         }
     ],
-    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
-            "LockMe\\": "src/"
+            "Lockme\\": "src/"
         }
     }
 }

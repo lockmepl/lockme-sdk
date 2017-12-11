@@ -1,5 +1,6 @@
 <?php
 namespace Lockme\SDK;
+use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use League\OAuth2\Client\Token\AccessToken;
 use Lockme\OAuth2\Client\Provider\Lockme as LockmeProvider;
 
@@ -136,7 +137,7 @@ class Lockme{
     if(!$data["hour"]){
       throw new \Exception("No hour");
     }
-    return $provider->executeRequest("PUT", "/room/{$data['roomid']}/reservation", $accessToken ?: $this->accessToken, $data);
+    return $this->provider->executeRequest("PUT", "/room/{$data['roomid']}/reservation", $accessToken ?: $this->accessToken, $data);
   }
 
   /**
@@ -159,6 +160,15 @@ class Lockme{
    * @return bool
    */
   public function EditReservation($roomId, $id, $data, $accessToken = null){
-    return $provider->executeRequest("PUT", "/room/{$$roomId}/reservation/{$id}", $accessToken ?: $this->accessToken, $data);
+    return $this->provider->executeRequest("PUT", "/room/{$roomId}/reservation/{$id}", $accessToken ?: $this->accessToken, $data);
+  }
+
+  /**
+   * Get resource owner
+   * @param  string|AccessToken|null $accessToken Access token
+   * @return ResourceOwnerInterface              Resource owner
+   */
+  public function getResourceOwner($accessToken = null){
+    return $this->provider->getResourceOwner($accessToken ?: $this->accessToken);
   }
 }

@@ -67,7 +67,7 @@ class Lockme{
    */
   public function refreshToken($accessToken = null){
     $accessToken = $accessToken ?: $this->accessToken;
-    $this->accessToken = $provider->getAccessToken('refresh_token', [
+    $this->accessToken = $this->provider->getAccessToken('refresh_token', [
       'refresh_token' => $accessToken->getRefreshToken()
     ]);
     return $this->accessToken;

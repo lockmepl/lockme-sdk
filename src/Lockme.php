@@ -28,15 +28,13 @@ class Lockme{
 
   /**
    * Generate authorization URL
-   * @param string $redirectUri Redirect URI
    * @param  array  $scopes Array of requested scopes
    * @return string         Redirect URL
    */
-  public function getAuthorizationUrl($redirectUri, $scopes = []){
+  public function getAuthorizationUrl($scopes = []){
     $this->provider;
     $authorizationUrl = $this->provider->getAuthorizationUrl([
-      'scope' => join(' ', $scopes),
-      'redirect_uri' => $redirectUri
+      'scope' => join(' ', $scopes)
     ]);
     $_SESSION['oauth2_lockme_state'] = $this->provider->getState();
     return $authorizationUrl;

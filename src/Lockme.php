@@ -1,7 +1,7 @@
 <?php
 namespace Lockme\SDK;
 use League\OAuth2\Client\Token\AccessToken;
-use Lockme\OAuth2\Client\Provider\Lockme;
+use Lockme\OAuth2\Client\Provider\Lockme as LockmeProvider;
 
 /**
  * Lockme SDK object
@@ -23,7 +23,7 @@ class Lockme{
    * @param array $options  Options for Lockme Provider
    */
   function __construct(array $options=[]){
-    $this->provider = new Lockme($options);
+    $this->provider = new LockmeProvider($options);
   }
 
   /**

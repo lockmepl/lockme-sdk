@@ -35,7 +35,7 @@ class Lockme{
   public function getAuthorizationUrl($redirectUri, $scopes = []){
     $this->provider;
     $authorizationUrl = $this->provider->getAuthorizationUrl([
-      'scope' => $scope,
+      'scope' => join(' ', $scopes),
       'redirectUri' => $redirectUri
     ]);
     $_SESSION['oauth2_lockme_state'] = $this->provider->getState();

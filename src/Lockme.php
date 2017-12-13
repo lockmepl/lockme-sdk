@@ -171,4 +171,22 @@ class Lockme{
   public function getResourceOwner($accessToken = null){
     return $this->provider->getResourceOwner($accessToken ?: $this->accessToken);
   }
+
+  /**
+   * Get callback message details
+   * @param int $messageId Message ID
+   * @return array
+   */
+  public function GetMessage($messageId){
+    return $this->provider->executeRequest("GET", "/message/{$messageId}", $accessToken ?: $this->accessToken);
+  }
+
+  /**
+   * Mark callback message as read
+   * @param int $messageId Message ID
+   * @return bool
+   */
+  public function MarkMessageRead($messageId){
+    return $this->provider->executeRequest("POST", "/message/{$messageId}", $accessToken ?: $this->accessToken);
+  }
 }

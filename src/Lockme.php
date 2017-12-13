@@ -160,7 +160,7 @@ class Lockme{
    * @return bool
    */
   public function EditReservation($roomId, $id, $data, $accessToken = null){
-    return $this->provider->executeRequest("PUT", "/room/{$roomId}/reservation/{$id}", $accessToken ?: $this->accessToken, $data);
+    return $this->provider->executeRequest("POST", "/room/{$roomId}/reservation/{$id}", $accessToken ?: $this->accessToken, $data);
   }
 
   /**

@@ -6,7 +6,7 @@
         "php": ">=5.5.0",
         "lustmored/oauth2-lockme": "^1.0.0"
     },
-    "license": "GPLv3",
+    "license": "GPL-3.0-or-later",
     "authors": [
         {
             "name": "Jakub Caban",

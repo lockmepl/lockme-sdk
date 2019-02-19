@@ -47,9 +47,10 @@ class Lockme
 
     /**
      * Get Access token from AuthCode
-     * @param  string $code AuthCode
+     * @param  string $code  AuthCode
      * @param  string $state State code
      * @return AccessToken       Access Token
+     * @throws \Exception
      */
     public function getTokenForCode($code, $state)
     {
@@ -83,6 +84,7 @@ class Lockme
      * Create default access token
      * @param string|AccessToken $token Default access token
      * @return AccessToken
+     * @throws \Exception
      */
     public function setDefaultAccessToken($token)
     {
@@ -133,9 +135,10 @@ class Lockme
 
     /**
      * Add new reservation
-     * @param array $data        Reservation data
+     * @param array                   $data        Reservation data
      * @param string|AccessToken|null $accessToken Access token
      * @return int
+     * @throws \Exception
      */
     public function AddReservation($data, $accessToken = null)
     {
@@ -188,21 +191,57 @@ class Lockme
 
     /**
      * Get callback message details
-     * @param int $messageId Message ID
+     * @param int  $messageId Message ID
+     * @param null $accessToken
      * @return array
      */
-    public function GetMessage($messageId)
+    public function GetMessage($messageId, $accessToken = null)
     {
         return $this->provider->executeRequest("GET", "/message/{$messageId}", $accessToken ?: $this->accessToken);
     }
 
     /**
      * Mark callback message as read
-     * @param int $messageId Message ID
+     * @param int  $messageId Message ID
+     * @param null $accessToken
      * @return bool
      */
-    public function MarkMessageRead($messageId)
+    public function MarkMessageRead($messageId, $accessToken = null)
     {
         return $this->provider->executeRequest("POST", "/message/{$messageId}", $accessToken ?: $this->accessToken);
+    }
+
+    /**
+     * @param int       $roomId
+     * @param \DateTime $date
+     * @param null      $accessToken
+     * @return array
+     */
+    public function GetDateSettings($roomId, $date, $accessToken = null)
+    {
+        return $this->provider->executeRequest("GET", "/room/{$roomId}/date/".$date->format("Y-m-d"), $accessToken ?: $this->accessToken);
+    }
+
+    /**
+     * @param int       $roomId
+     * @param \DateTime $date
+     * @param array     $settings
+     * @param null      $accessToken
+     * @return array
+     */
+    public function SetDateSettings($roomId, $date, $settings, $accessToken = null)
+    {
+        return $this->provider->executeRequest("POST", "/room/{$roomId}/date/".$date->format("Y-m-d"), $accessToken ?: $this->accessToken, $settings);
+    }
+
+    /**
+     * @param int       $roomId
+     * @param \DateTime $date
+     * @param null      $accessToken
+     * @return array
+     */
+    public function RemoveDateSettings($roomId, $date, $accessToken = null)
+    {
+        return $this->provider->executeRequest("DELETE", "/room/{$roomId}/date/".$date->format("Y-m-d"), $accessToken ?: $this->accessToken);
     }
 }

@@ -180,6 +180,29 @@ class Lockme
     }
 
     /**
+     * @param int $roomId Room ID
+     * @param string $id Reservation ID
+     * @param array $data        Move data - array with roomid, date (Y-m-d) and hour (H:i:s)
+     * @param string|AccessToken|null $accessToken Access token
+     * @return bool
+     */
+    public function MoveReservation($roomId, $id, $data, $accessToken = null)
+    {
+        return $this->provider->executeRequest("POST", "/room/{$roomId}/reservation/{$id}/move", $accessToken ?: $this->accessToken, $data);
+    }
+
+    /**
+     * @param int       $roomId
+     * @param \DateTime $date
+     * @param string|AccessToken|null      $accessToken
+     * @return mixed
+     */
+    public function GetReservations($roomId, $date, $accessToken = null)
+    {
+        return $this->provider->executeRequest("GET", "/room/{$roomId}/reservations/".$date->format("Y-m-d"), $accessToken ?: $this->accessToken);
+    }
+
+    /**
      * Get resource owner
      * @param  string|AccessToken|null $accessToken Access token
      * @return ResourceOwnerInterface              Resource owner
@@ -243,5 +266,28 @@ class Lockme
     public function RemoveDateSettings($roomId, $date, $accessToken = null)
     {
         return $this->provider->executeRequest("DELETE", "/room/{$roomId}/date/".$date->format("Y-m-d"), $accessToken ?: $this->accessToken);
+    }
+
+    /**
+     * @param int       $roomId
+     * @param int       $day        0 - Monday, 1 - Tuesday, ..., 6 - Sunday
+     * @param null      $accessToken
+     * @return array
+     */
+    public function GetDaySettings($roomId, $day, $accessToken = null)
+    {
+        return $this->provider->executeRequest("GET", "/room/{$roomId}/day/{$day}", $accessToken ?: $this->accessToken);
+    }
+
+    /**
+     * @param int       $roomId
+     * @param int       $day        0 - Monday, 1 - Tuesday, ..., 6 - Sunday
+     * @param array     $settings
+     * @param null      $accessToken
+     * @return array
+     */
+    public function SetDaySettings($roomId, $day, $settings, $accessToken = null)
+    {
+        return $this->provider->executeRequest("POST", "/room/{$roomId}/day/{$day}", $accessToken ?: $this->accessToken, $settings);
     }
 }

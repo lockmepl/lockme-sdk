@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "69e0b923836c1c9091209e99cee5837d",
+    "content-hash": "b95aeab2864cedad06d2293c9e148765",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -264,16 +264,16 @@
         },
         {
             "name": "lustmored/oauth2-lockme",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Lustmored/oauth2-lockme.git",
-                "reference": "1272ac861af561ff78b5b36d9fe0354f3eac2e27"
+                "reference": "0321a1db22e983522a69002b5057a84d83d42b6d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Lustmored/oauth2-lockme/zipball/1272ac861af561ff78b5b36d9fe0354f3eac2e27",
-                "reference": "1272ac861af561ff78b5b36d9fe0354f3eac2e27",
+                "url": "https://api.github.com/repos/Lustmored/oauth2-lockme/zipball/0321a1db22e983522a69002b5057a84d83d42b6d",
+                "reference": "0321a1db22e983522a69002b5057a84d83d42b6d",
                 "shasum": ""
             },
             "require": {
@@ -297,7 +297,7 @@
                 }
             ],
             "description": "LockMe OAuth2 provider",
-            "time": "2020-04-08T09:34:59+00:00"
+            "time": "2020-04-08T10:46:43+00:00"
         },
         {
             "name": "paragonie/random_compat",

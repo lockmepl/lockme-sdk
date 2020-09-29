@@ -2,3 +2,4 @@ composer.phar
 vendor/
 .idea
 test.php
+token.json

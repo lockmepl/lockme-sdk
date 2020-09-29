@@ -1,9 +1,13 @@
 <?php
 namespace Lockme\SDK;
 
+use DateTime;
+use Exception;
+use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use League\OAuth2\Client\Token\AccessToken;
 use Lockme\OAuth2\Client\Provider\Lockme as LockmeProvider;
+use RuntimeException;
 
 /**
  * Lockme SDK object
@@ -14,12 +18,12 @@ class Lockme
      * Lockme OAuth2 provider
      * @var Lockme
      */
-    private $provider = null;
+    private $provider;
     /**
      * Default access token
      * @var AccessToken
      */
-    private $accessToken = null;
+    private $accessToken;
 
     /**
      * Object constructor
@@ -39,7 +43,7 @@ class Lockme
     {
         $this->provider;
         $authorizationUrl = $this->provider->getAuthorizationUrl([
-            'scope' => join(' ', $scopes)
+            'scope' => implode(' ', $scopes)
         ]);
         $_SESSION['oauth2_lockme_state'] = $this->provider->getState();
         return $authorizationUrl;
@@ -50,13 +54,13 @@ class Lockme
      * @param  string $code  AuthCode
      * @param  string $state State code
      * @return AccessToken       Access Token
-     * @throws \Exception
+     * @throws Exception
      */
     public function getTokenForCode($code, $state)
     {
-        if ($state != $_SESSION['oauth2_lockme_state']) {
+        if ($state !== $_SESSION['oauth2_lockme_state']) {
             unset($_SESSION['oauth2_lockme_state']);
-            throw new \Exception("Wrong state");
+            throw new RuntimeException("Wrong state");
         }
         unset($_SESSION['oauth2_lockme_state']);
 
@@ -68,8 +72,9 @@ class Lockme
 
     /**
      * Refresh access token
-     * @param  AccessToken|null $accessToken Access token
+     * @param  AccessToken|null  $accessToken  Access token
      * @return AccessToken        Refreshed token
+     * @throws IdentityProviderException
      */
     public function refreshToken($accessToken = null)
     {
@@ -84,7 +89,7 @@ class Lockme
      * Create default access token
      * @param string|AccessToken $token Default access token
      * @return AccessToken
-     * @throws \Exception
+     * @throws Exception
      */
     public function setDefaultAccessToken($token)
     {
@@ -93,7 +98,7 @@ class Lockme
         } elseif ($token instanceof AccessToken) {
             $this->accessToken = $token;
         } else {
-            throw new \Exception("Incorrect access token");
+            throw new RuntimeException("Incorrect access token");
         }
         if ($this->accessToken->hasExpired()) {
             $this->refreshToken();
@@ -103,8 +108,9 @@ class Lockme
 
     /**
      * Send message to /test endpoint
-     * @param string|AccessToken|null $accessToken Access token
+     * @param  string|AccessToken|null  $accessToken  Access token
      * @return string
+     * @throws IdentityProviderException
      */
     public function Test($accessToken = null)
     {
@@ -113,8 +119,9 @@ class Lockme
 
     /**
      * Get list of available rooms
-     * @param string|AccessToken|null $accessToken Access token
+     * @param  string|AccessToken|null  $accessToken  Access token
      * @return array
+     * @throws IdentityProviderException
      */
     public function RoomList($accessToken = null)
     {
@@ -123,10 +130,11 @@ class Lockme
 
     /**
      * Get reservation data
-     * @param int $roomId Room ID
-     * @param string $id Reservation ID
-     * @param string|AccessToken|null $accessToken Access token
+     * @param  int  $roomId  Room ID
+     * @param  string  $id  Reservation ID
+     * @param  string|AccessToken|null  $accessToken  Access token
      * @return array
+     * @throws IdentityProviderException
      */
     public function Reservation($roomId, $id, $accessToken = null)
     {
@@ -138,28 +146,29 @@ class Lockme
      * @param array                   $data        Reservation data
      * @param string|AccessToken|null $accessToken Access token
      * @return int
-     * @throws \Exception
+     * @throws Exception
      */
     public function AddReservation($data, $accessToken = null)
     {
         if (!$data['roomid']) {
-            throw new \Exception("No room ID");
+            throw new RuntimeException("No room ID");
         }
         if (!$data["date"]) {
-            throw new \Exception("No date");
+            throw new RuntimeException("No date");
         }
         if (!$data["hour"]) {
-            throw new \Exception("No hour");
+            throw new RuntimeException("No hour");
         }
         return $this->provider->executeRequest("PUT", "/room/{$data['roomid']}/reservation", $accessToken ?: $this->accessToken, $data);
     }
 
     /**
      * Delete reservation
-     * @param int $roomId Room ID
-     * @param string $id Reservation ID
-     * @param string|AccessToken|null $accessToken Access token
+     * @param  int  $roomId  Room ID
+     * @param  string  $id  Reservation ID
+     * @param  string|AccessToken|null  $accessToken  Access token
      * @return bool
+     * @throws IdentityProviderException
      */
     public function DeleteReservation($roomId, $id, $accessToken = null)
     {
@@ -168,11 +177,12 @@ class Lockme
 
     /**
      * Edit reservation
-     * @param int $roomId Room ID
-     * @param string $id Reservation ID
-     * @param array $data        Reservation data
-     * @param string|AccessToken|null $accessToken Access token
+     * @param  int  $roomId  Room ID
+     * @param  string  $id  Reservation ID
+     * @param  array  $data  Reservation data
+     * @param  string|AccessToken|null  $accessToken  Access token
      * @return bool
+     * @throws IdentityProviderException
      */
     public function EditReservation($roomId, $id, $data, $accessToken = null)
     {
@@ -180,11 +190,12 @@ class Lockme
     }
 
     /**
-     * @param int $roomId Room ID
-     * @param string $id Reservation ID
-     * @param array $data        Move data - array with roomid, date (Y-m-d) and hour (H:i:s)
-     * @param string|AccessToken|null $accessToken Access token
+     * @param  int  $roomId  Room ID
+     * @param  string  $id  Reservation ID
+     * @param  array  $data  Move data - array with roomid, date (Y-m-d) and hour (H:i:s)
+     * @param  string|AccessToken|null  $accessToken  Access token
      * @return bool
+     * @throws IdentityProviderException
      */
     public function MoveReservation($roomId, $id, $data, $accessToken = null)
     {
@@ -192,10 +203,11 @@ class Lockme
     }
 
     /**
-     * @param int       $roomId
-     * @param \DateTime $date
-     * @param string|AccessToken|null      $accessToken
+     * @param  int  $roomId
+     * @param  DateTime  $date
+     * @param  string|AccessToken|null  $accessToken
      * @return mixed
+     * @throws IdentityProviderException
      */
     public function GetReservations($roomId, $date, $accessToken = null)
     {
@@ -214,9 +226,10 @@ class Lockme
 
     /**
      * Get callback message details
-     * @param int  $messageId Message ID
-     * @param null $accessToken
+     * @param  int  $messageId  Message ID
+     * @param  null  $accessToken
      * @return array
+     * @throws IdentityProviderException
      */
     public function GetMessage($messageId, $accessToken = null)
     {
@@ -225,9 +238,10 @@ class Lockme
 
     /**
      * Mark callback message as read
-     * @param int  $messageId Message ID
-     * @param null $accessToken
+     * @param  int  $messageId  Message ID
+     * @param  null  $accessToken
      * @return bool
+     * @throws IdentityProviderException
      */
     public function MarkMessageRead($messageId, $accessToken = null)
     {
@@ -235,10 +249,11 @@ class Lockme
     }
 
     /**
-     * @param int       $roomId
-     * @param \DateTime $date
-     * @param null      $accessToken
+     * @param  int  $roomId
+     * @param  DateTime  $date
+     * @param  null  $accessToken
      * @return array
+     * @throws IdentityProviderException
      */
     public function GetDateSettings($roomId, $date, $accessToken = null)
     {
@@ -246,11 +261,12 @@ class Lockme
     }
 
     /**
-     * @param int       $roomId
-     * @param \DateTime $date
-     * @param array     $settings
-     * @param null      $accessToken
+     * @param  int  $roomId
+     * @param  DateTime  $date
+     * @param  array  $settings
+     * @param  null  $accessToken
      * @return array
+     * @throws IdentityProviderException
      */
     public function SetDateSettings($roomId, $date, $settings, $accessToken = null)
     {
@@ -258,10 +274,11 @@ class Lockme
     }
 
     /**
-     * @param int       $roomId
-     * @param \DateTime $date
-     * @param null      $accessToken
+     * @param  int  $roomId
+     * @param  DateTime  $date
+     * @param  null  $accessToken
      * @return array
+     * @throws IdentityProviderException
      */
     public function RemoveDateSettings($roomId, $date, $accessToken = null)
     {
@@ -269,10 +286,11 @@ class Lockme
     }
 
     /**
-     * @param int       $roomId
-     * @param int       $day        0 - Monday, 1 - Tuesday, ..., 6 - Sunday
-     * @param null      $accessToken
+     * @param  int  $roomId
+     * @param  int  $day  0 - Monday, 1 - Tuesday, ..., 6 - Sunday
+     * @param  null  $accessToken
      * @return array
+     * @throws IdentityProviderException
      */
     public function GetDaySettings($roomId, $day, $accessToken = null)
     {
@@ -280,11 +298,12 @@ class Lockme
     }
 
     /**
-     * @param int       $roomId
-     * @param int       $day        0 - Monday, 1 - Tuesday, ..., 6 - Sunday
-     * @param array     $settings
-     * @param null      $accessToken
+     * @param  int  $roomId
+     * @param  int  $day  0 - Monday, 1 - Tuesday, ..., 6 - Sunday
+     * @param  array  $settings
+     * @param  null  $accessToken
      * @return array
+     * @throws IdentityProviderException
      */
     public function SetDaySettings($roomId, $day, $settings, $accessToken = null)
     {

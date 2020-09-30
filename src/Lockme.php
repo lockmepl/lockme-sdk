@@ -238,10 +238,10 @@ class Lockme
      * @param  string  $id  Reservation ID
      * @param  array  $data  Reservation data
      * @param  string|AccessToken|null  $accessToken  Access token
-     * @return bool
+     * @return array
      * @throws IdentityProviderException
      */
-    public function EditReservation(int $roomId, string $id, array $data, $accessToken = null): bool
+    public function EditReservation(int $roomId, string $id, array $data, $accessToken = null): array
     {
         return $this->provider->executeRequest("POST", "/room/{$roomId}/reservation/{$id}", $accessToken ?: $this->accessToken, $data);
     }
@@ -251,10 +251,10 @@ class Lockme
      * @param  string  $id  Reservation ID
      * @param  array  $data  Move data - array with roomid, date (Y-m-d) and hour (H:i:s)
      * @param  string|AccessToken|null  $accessToken  Access token
-     * @return bool
+     * @return array
      * @throws IdentityProviderException
      */
-    public function MoveReservation(int $roomId, string $id, array $data, $accessToken = null): bool
+    public function MoveReservation(int $roomId, string $id, array $data, $accessToken = null): array
     {
         return $this->provider->executeRequest("POST", "/room/{$roomId}/reservation/{$id}/move", $accessToken ?: $this->accessToken, $data);
     }
@@ -263,10 +263,10 @@ class Lockme
      * @param  int  $roomId
      * @param  DateTime  $date
      * @param  string|AccessToken|null  $accessToken
-     * @return mixed
+     * @return array
      * @throws IdentityProviderException
      */
-    public function GetReservations(int $roomId, DateTime $date, $accessToken = null)
+    public function GetReservations(int $roomId, DateTime $date, $accessToken = null): array
     {
         return $this->provider->executeRequest("GET", "/room/{$roomId}/reservations/".$date->format("Y-m-d"), $accessToken ?: $this->accessToken);
     }

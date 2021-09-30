@@ -4,7 +4,7 @@
     "type": "library",
     "require": {
         "php": ">=7.2.0",
-        "lustmored/oauth2-lockme": "^1.1.1",
+        "lustmored/oauth2-lockme": "^1.2.1",
         "ext-json": "*",
         "symfony/lock": "^5.0"
     },

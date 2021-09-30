@@ -47,9 +47,8 @@ class Lockme
      * @param  array  $scopes Array of requested scopes
      * @return string         Redirect URL
      */
-    public function getAuthorizationUrl($scopes = []): string
+    public function getAuthorizationUrl(array $scopes = []): string
     {
-        $this->provider;
         $authorizationUrl = $this->provider->getAuthorizationUrl([
             'scope' => implode(' ', $scopes)
         ]);
@@ -84,7 +83,7 @@ class Lockme
      * @return AccessToken        Refreshed token
      * @throws IdentityProviderException
      */
-    public function refreshToken($accessToken = null): AccessToken
+    public function refreshToken(?AccessToken $accessToken = null): AccessToken
     {
         $accessToken = $accessToken ?: $this->accessToken;
         $this->accessToken = $this->provider->getAccessToken('refresh_token', [

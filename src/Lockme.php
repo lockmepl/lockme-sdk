@@ -149,7 +149,6 @@ class Lockme
             $lock->acquire(true);
             $this->reloadToken($load);
 
-            /** @noinspection NotOptimalIfConditionsInspection */
             if($this->accessToken->hasExpired()) {
                 $this->refreshToken();
                 if (is_callable($save)) {

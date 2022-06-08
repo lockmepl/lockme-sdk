@@ -38,7 +38,7 @@ class Lockme
      */
     public function __construct(array $options=[])
     {
-        $this->provider = new LockmeProvider($options);
+        $this->provider = $options['provider'] ?? new LockmeProvider($options);
         $this->lockFactory = new LockFactory(new FlockStore());
     }
 

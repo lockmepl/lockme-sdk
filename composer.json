@@ -3,10 +3,10 @@
     "description": "LockMe SDK",
     "type": "library",
     "require": {
-        "php": ">=7.2.0",
+        "php": ">=8.1.0",
         "lustmored/oauth2-lockme": "^1.2.1",
         "ext-json": "*",
-        "symfony/lock": "^5.4|^6.0|^7.0"
+        "symfony/lock": "^6.0|^7.0"
     },
     "license": "GPL-3.0-or-later",
     "authors": [

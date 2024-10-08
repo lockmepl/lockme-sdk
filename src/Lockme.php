@@ -79,8 +79,13 @@ class Lockme
      */
     public function getTokenForCode(string $code, string $state): AccessToken
     {
-        if ($state !== $_SESSION['oauth2_lockme_state']) {
-            unset($_SESSION['oauth2_lockme_state']);
+        if (
+            !isset($_SESSION['oauth2_lockme_state'])
+            || $state !== $_SESSION['oauth2_lockme_state']
+        ) {
+            if (isset($_SESSION['oauth2_lockme_state'])) {
+                unset($_SESSION['oauth2_lockme_state']);
+            }
             throw new RuntimeException("Wrong state");
         }
         unset($_SESSION['oauth2_lockme_state']);

@@ -61,12 +61,13 @@ class Lockme
      * @param  array  $scopes Array of requested scopes
      * @return string         Redirect URL
      */
-    public function getAuthorizationUrl(array $scopes = []): string
+    public function getAuthorizationUrl(array $scopes = [], ?array &$session = null): string
     {
+        $session ??= $_SESSION;
         $authorizationUrl = $this->provider->getAuthorizationUrl([
             'scope' => implode(' ', $scopes)
         ]);
-        $_SESSION['oauth2_lockme_state'] = $this->provider->getState();
+        $session['oauth2_lockme_state'] = $this->provider->getState();
         return $authorizationUrl;
     }
 
@@ -77,22 +78,20 @@ class Lockme
      * @return AccessToken       Access Token
      * @throws Exception
      */
-    public function getTokenForCode(string $code, string $state): AccessToken
+    public function getTokenForCode(string $code, string $state, ?string $sessionState = null): AccessToken
     {
-        if (
-            !isset($_SESSION['oauth2_lockme_state'])
-            || $state !== $_SESSION['oauth2_lockme_state']
-        ) {
-            if (isset($_SESSION['oauth2_lockme_state'])) {
-                unset($_SESSION['oauth2_lockme_state']);
-            }
+        $sessionState ??= $_SESSION['oauth2_lockme_state'] ?? null;
+        if (session_id() && isset($_SESSION['oauth2_lockme_state'])) {
+            unset($_SESSION['oauth2_lockme_state']);
+        }
+        if ($state !== $sessionState) {
             throw new RuntimeException("Wrong state");
         }
-        unset($_SESSION['oauth2_lockme_state']);
 
         $this->accessToken = $this->provider->getAccessToken('authorization_code', [
             'code' => $code
         ]);
+
         return $this->accessToken;
     }
 

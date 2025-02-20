@@ -3,6 +3,7 @@ namespace Lockme\SDK;
 
 use DateTime;
 use Exception;
+use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use League\OAuth2\Client\Token\AccessToken;
@@ -21,26 +22,24 @@ use function is_callable;
 class Lockme
 {
     /**
-     * Lockme OAuth2 provider
-     * @var Lockme
+     * OAuth2 provider
      */
-    private $provider;
-    /**
-     * @var LockFactory
-     */
-    private $lockFactory;
-    /**
-     * Default access token
-     * @var AccessToken
-     */
-    private $accessToken;
+    private AbstractProvider $provider;
+
+    private LockFactory $lockFactory;
+
+    private AccessToken $accessToken;
 
     /**
      * Object constructor
      * @param array $options  Options for Lockme Provider
      */
-    public function __construct(array $options=[])
+    public function __construct(array $options = [])
     {
+        if (!isset($options['scopes'])) {
+            $options['scopes'] = ['rooms_manage'];
+        }
+
         $this->provider = $options['provider'] ?? new LockmeProvider($options);
         $this->lockFactory = new LockFactory($this->lockStore($options));
     }
@@ -49,7 +48,7 @@ class Lockme
     {
         try {
             return new SemaphoreStore();
-        } catch (InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException) {
             // Semaphore is not supported
         }
 
@@ -164,19 +163,19 @@ class Lockme
     {
         $this->reloadToken($load);
 
-        if($this->accessToken->hasExpired()) {
+//        if($this->accessToken->hasExpired()) {
             $lock = $this->lockFactory->createLock('lockme-refresh-token');
             $lock->acquire(true);
             $this->reloadToken($load);
 
-            if($this->accessToken->hasExpired()) {
+//            if($this->accessToken->hasExpired()) {
                 $this->refreshToken();
                 if (is_callable($save)) {
                     $save($this->accessToken);
                 }
-            }
+//            }
             $lock->release();
-        }
+//        }
 
         return $this->accessToken;
     }

@@ -3,8 +3,8 @@
     "description": "LockMe SDK",
     "type": "library",
     "require": {
-        "php": ">=8.1.0",
-        "lustmored/oauth2-lockme": "^1.2.1",
+        "php": ">=8.2.0",
+        "lustmored/oauth2-lockme": "^1.4.0",
         "ext-json": "*",
         "symfony/lock": "^6.0|^7.0"
     },

@@ -238,7 +238,7 @@ class Lockme
     /**
      * Delete reservation
      * @param  int  $roomId  Room ID
-     * @param  string  $id  Reservation ID
+     * @param  string  $externalId  External Reservation ID
      * @param  string|AccessToken|null  $accessToken  Access token
      * @return bool
      * @throws IdentityProviderException

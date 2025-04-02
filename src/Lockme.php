@@ -236,6 +236,19 @@ class Lockme
     }
 
     /**
+     * Delete reservation
+     * @param  int  $roomId  Room ID
+     * @param  string  $id  Reservation ID
+     * @param  string|AccessToken|null  $accessToken  Access token
+     * @return bool
+     * @throws IdentityProviderException
+     */
+    public function DeleteReservationByExternalId(int $roomId, string $externalId, AccessToken|string|null $accessToken = null): bool
+    {
+        return $this->provider->executeRequest("DELETE", "/room/$roomId/reservation/ext/$externalId", $accessToken ?: $this->accessToken);
+    }
+
+    /**
      * Edit reservation
      * @param  int  $roomId  Room ID
      * @param  string  $id  Reservation ID

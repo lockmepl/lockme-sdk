@@ -2,6 +2,8 @@
 
 PHP SDK for interacting with the LockMe API. This library provides a simple interface for authentication and making API calls to the LockMe platform.
 
+For comprehensive API documentation, please visit [https://apidoc.lock.me/](https://apidoc.lock.me/).
+
 ## Requirements
 
 - PHP 7.2 or higher
@@ -96,7 +98,7 @@ $result = $sdk->Test();
 $rooms = $sdk->RoomList();
 ```
 
-### Get Reservations for a Room
+### Get Bookings for a Room
 
 ```php
 use DateTime;
@@ -106,20 +108,28 @@ $date = new DateTime();
 $reservations = $sdk->GetReservations($roomId, $date);
 ```
 
-### Add a Reservation
+### Add a Booking
 
 ```php
 $data = [
-    'date' => '2023-01-01',
-    'hour' => '11:00:00',
-    'roomid' => 123,
-    'extid' => 'abc123'
+    'date' => '2023-01-01',          // Date in YYYY-MM-DD format
+    'hour' => '11:00:00',            // Time in HH:MM:SS format
+    'roomid' => 123,                 // Room ID
+    'extid' => 'abc123',             // External ID (your system's ID)
+    'name' => 'John',                // Customer's first name
+    'surname' => 'Doe',              // Customer's last name
+    'email' => 'john.doe@example.com', // Customer's email
+    'phone' => '+1234567890',        // Customer's phone number
+    'people' => 4,                   // Number of people
+    'pricer' => 1,                   // Pricer ID (pricing option)
+    'comment' => 'Special requests', // Booking comment
+    'price' => 100.00,               // Price
 ];
 
 $reservationId = $sdk->AddReservation($data);
 ```
 
-### Get Reservation Details
+### Get Booking Details
 
 ```php
 $roomId = 123;
@@ -127,20 +137,28 @@ $reservationId = 'abc123';
 $reservation = $sdk->Reservation($roomId, $reservationId);
 ```
 
-### Edit a Reservation
+> **Note:** Whenever a booking ID is used, you can also use an external ID (the one set via API) by using the format "ext/{id}". For example: `$reservationId = 'ext/abc123';`
+
+### Edit a Booking
 
 ```php
 $roomId = 123;
 $reservationId = 'abc123';
 $data = [
-    'name' => 'John',
-    'surname' => 'Doe',
+    'name' => 'John',               // Customer's first name
+    'surname' => 'Doe',             // Customer's last name
+    'email' => 'john.doe@example.com', // Customer's email
+    'phone' => '+1234567890',       // Customer's phone number
+    'people' => 4,                  // Number of people
+    'pricer' => 1,                  // Pricer ID (pricing option)
+    'comment' => 'Updated requests', // Booking comment
+    'price' => 100.00,              // Price
 ];
 
 $result = $sdk->EditReservation($roomId, $reservationId, $data);
 ```
 
-### Delete a Reservation
+### Delete a Booking
 
 ```php
 $roomId = 123;
@@ -161,18 +179,14 @@ $settings = $sdk->GetDateSettings($roomId, $date);
 ```php
 $roomId = 123;
 $date = new DateTime();
-$settings = [
+$settings = [                  // Specific hour settings
     [
-        "hour" => "16:11:11",
-        "pricers" => [1227]
+        "hour" => "16:00:00",   // Time slot
+        "pricers" => [1227],    // Available pricing options for this slot
     ],
     [
-        "hour" => "18:12:12",
-        "pricers" => [1227]
-    ],
-    [
-        "hour" => "18:12:12",
-        "pricers" => [1227, 1228]
+        "hour" => "18:00:00",
+        "pricers" => [1227, 1228],
     ]
 ];
 
@@ -188,12 +202,12 @@ $result = $sdk->SetDateSettings($roomId, $date, $settings);
 - `loadAccessToken(callable $load, ?callable $save)`: Load and optionally set up saving of access token
 - `Test()`: Test the API connection
 - `RoomList()`: Get list of rooms
-- `Reservation(int $roomId, string $id)`: Get reservation details
-- `AddReservation(array $data)`: Create a new reservation
-- `DeleteReservation(int $roomId, string $id)`: Delete a reservation
-- `EditReservation(int $roomId, string $id, array $data)`: Edit a reservation
-- `MoveReservation(int $roomId, string $id, array $data)`: Move a reservation
-- `GetReservations(int $roomId, DateTime $date)`: Get reservations for a room on a specific date
+- `Reservation(int $roomId, string $id)`: Get booking details
+- `AddReservation(array $data)`: Create a new booking
+- `DeleteReservation(int $roomId, string $id)`: Delete a booking
+- `EditReservation(int $roomId, string $id, array $data)`: Edit a booking
+- `MoveReservation(int $roomId, string $id, array $data)`: Move a booking
+- `GetReservations(int $roomId, DateTime $date)`: Get bookings for a room on a specific date
 - `GetMessage(int $messageId)`: Get a message
 - `MarkMessageRead(int $messageId)`: Mark a message as read
 - `GetDateSettings(int $roomId, DateTime $date)`: Get settings for a specific date

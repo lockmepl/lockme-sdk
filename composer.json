@@ -6,7 +6,7 @@
         "php": ">=8.2.0",
         "lustmored/oauth2-lockme": "^1.4.0",
         "ext-json": "*",
-        "symfony/lock": "^6.0|^7.0"
+        "symfony/lock": "^6.0|^7.0|^8.0"
     },
     "license": "GPL-3.0-or-later",
     "authors": [

@@ -191,12 +191,12 @@ class Lockme
     /**
      * Get reservation data
      * @param int $roomId Room ID
-     * @param string $id Booking ID
+     * @param string|int $id Booking ID
      * @param AccessToken|string|null $accessToken
      * @return array
      * @throws IdentityProviderException
      */
-    public function Reservation(int $roomId, string $id, AccessToken|string|null $accessToken = null): array
+    public function Reservation(int $roomId, string|int $id, AccessToken|string|null $accessToken = null): array
     {
         return $this->provider->executeRequest("GET", "/room/$roomId/reservation/$id", $accessToken ?: $this->accessToken);
     }
@@ -225,12 +225,12 @@ class Lockme
     /**
      * Delete reservation
      * @param  int  $roomId  Room ID
-     * @param  string  $id  Reservation ID
+     * @param  string|int  $id  Reservation ID
      * @param  string|AccessToken|null  $accessToken  Access token
      * @return bool
      * @throws IdentityProviderException
      */
-    public function DeleteReservation(int $roomId, string $id, AccessToken|string|null $accessToken = null): bool
+    public function DeleteReservation(int $roomId, string|int $id, AccessToken|string|null $accessToken = null): bool
     {
         return $this->provider->executeRequest("DELETE", "/room/$roomId/reservation/$id", $accessToken ?: $this->accessToken);
     }
@@ -238,26 +238,26 @@ class Lockme
     /**
      * Edit reservation
      * @param  int  $roomId  Room ID
-     * @param  string  $id  Reservation ID
+     * @param  string|int  $id  Reservation ID
      * @param  array  $data  Reservation data
      * @param  string|AccessToken|null  $accessToken  Access token
      * @return array
      * @throws IdentityProviderException
      */
-    public function EditReservation(int $roomId, string $id, array $data, AccessToken|string|null $accessToken = null): array
+    public function EditReservation(int $roomId, string|int $id, array $data, AccessToken|string|null $accessToken = null): array
     {
         return $this->provider->executeRequest("POST", "/room/$roomId/reservation/$id", $accessToken ?: $this->accessToken, $data);
     }
 
     /**
      * @param  int  $roomId  Room ID
-     * @param  string  $id  Reservation ID
+     * @param  string|int  $id  Reservation ID
      * @param  array  $data  Move data - array with roomid, date (Y-m-d) and hour (H:i:s)
      * @param  string|AccessToken|null  $accessToken  Access token
      * @return array
      * @throws IdentityProviderException
      */
-    public function MoveReservation(int $roomId, string $id, array $data, AccessToken|string|null $accessToken = null): array
+    public function MoveReservation(int $roomId, string|int $id, array $data, AccessToken|string|null $accessToken = null): array
     {
         return $this->provider->executeRequest("POST", "/room/$roomId/reservation/$id/move", $accessToken ?: $this->accessToken, $data);
     }

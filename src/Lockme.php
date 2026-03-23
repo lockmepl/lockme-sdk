@@ -28,7 +28,7 @@ class Lockme
 
     private LockFactory $lockFactory;
 
-    private AccessToken $accessToken;
+    private ?AccessToken $accessToken = null;
 
     /**
      * Object constructor

@@ -98,6 +98,23 @@ $result = $sdk->Test();
 $rooms = $sdk->RoomList();
 ```
 
+### Get Room Details
+
+```php
+$roomId = 123;
+$room = $sdk->GetRoom($roomId);
+```
+
+### Edit Room Details
+
+```php
+$roomId = 123;
+$data = [
+    'calendarMargin' => 15, // numeric value
+];
+$room = $sdk->EditRoom($roomId, $data);
+```
+
 ### Get Bookings for a Room
 
 ```php
@@ -202,6 +219,8 @@ $result = $sdk->SetDateSettings($roomId, $date, $settings);
 - `loadAccessToken(callable $load, ?callable $save)`: Load and optionally set up saving of access token
 - `Test()`: Test the API connection
 - `RoomList()`: Get list of rooms
+- `GetRoom(int $roomId)`: Get room details
+- `EditRoom(int $roomId, array $data)`: Update room details (`calendarMargin` only)
 - `Reservation(int $roomId, string $id)`: Get booking details
 - `AddReservation(array $data)`: Create a new booking
 - `DeleteReservation(int $roomId, string $id)`: Delete a booking

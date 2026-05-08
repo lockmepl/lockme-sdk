@@ -189,6 +189,31 @@ class Lockme
     }
 
     /**
+     * Get room details
+     * @param int $roomId Room ID
+     * @param AccessToken|string|null $accessToken
+     * @return array
+     * @throws IdentityProviderException
+     */
+    public function GetRoom(int $roomId, AccessToken|string|null $accessToken = null): array
+    {
+        return $this->provider->executeRequest("GET", "/room/$roomId", $accessToken ?: $this->accessToken);
+    }
+
+    /**
+     * Update room details
+     * @param int $roomId Room ID
+     * @param array $data Room data (currently only `calendarMargin`)
+     * @param AccessToken|string|null $accessToken
+     * @return array
+     * @throws IdentityProviderException
+     */
+    public function EditRoom(int $roomId, array $data, AccessToken|string|null $accessToken = null): array
+    {
+        return $this->provider->executeRequest("POST", "/room/$roomId", $accessToken ?: $this->accessToken, $data);
+    }
+
+    /**
      * Get reservation data
      * @param int $roomId Room ID
      * @param string|int $id Booking ID
